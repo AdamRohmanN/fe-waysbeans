@@ -1,13 +1,15 @@
 import logo from '../../assets/logo-navbar.svg'
 import cartIcon from '../../assets/cart.svg'
-import Dropdown from './dropdown'
+
 import { Login, Register } from './modal'
+import Dropdown from './dropdown'
+import { UserContext } from "../context/user"
+// import { API } from '../config/api'
+
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+// import { useQuery } from 'react-query'
 import { motion } from 'framer-motion'
-import { useQuery } from 'react-query'
-import { UserContext } from "../context/user"
-import { API } from '../config/api'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -34,10 +36,10 @@ export default function Header() {
     dispatch({ type: 'LOGOUT' })
   }
 
-  const { data: cart } = useQuery("cartsCache", async () => {
-    const response = await API.get("/carts");
-    return response.data.data;
-  });
+  // const { data: cart } = useQuery("cartsCache", async () => {
+  //   const response = await API.get("/carts");
+  //   return response.data.data;
+  // });
 
   useEffect(() => {
     if (state.isLogin === true) {
@@ -47,8 +49,8 @@ export default function Header() {
   },[state])
   return (
     <header>
-      <nav className='flex justify-between items-center bg-[#f5f5f5] shadow-2xl py-4 px-24'>
-        <motion.img className='h-12 cursor-pointer' src={logo} alt="logo"
+      <nav className='flex justify-between items-center bg-[#f5f5f5] shadow-lg py-3 px-24'>
+        <motion.img className='h-11 cursor-pointer' src={logo} alt="logo"
         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
         onClick={ () => navigate("/") }
         />
@@ -56,13 +58,16 @@ export default function Header() {
         <div className="flex items-center">
           { state.user.status === "customer" &&
           <div>
-            <img src={cartIcon} alt="cart" onClick={()=>navigate("/cart")} />
-            { cart?.length >= 1 &&
+            <img className='mr-7'
+            src={cartIcon} alt="cart"
+            onClick={()=>navigate("/cart")} />
+            {/* { cart?.length >= 1 &&
             <span>{cart?.length}</span>
-            }
+            } */}
           </div>
           }
-          <img src="https://picsum.photos/200/300" alt="user"
+          <img className='h-12 aspect-square rounded-full'
+          src="https://picsum.photos/200/300" alt="user"
           onClick={() => (state.user.status === "admin") ? setAdminDropdown(!adminDropdown) : setUserDropdown(!userDropdown)}
           />
         </div>

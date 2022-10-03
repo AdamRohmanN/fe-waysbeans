@@ -1,10 +1,11 @@
 import Home from './pages/Home'
 import Detail from './pages/Detail'
-import Cart from './pages/Cart'
-import { useContext, useEffect } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+
 import { UserContext } from './context/user'
 import { API, setAuthToken } from './config/api'
+
+import { useContext, useEffect } from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -13,7 +14,7 @@ if (localStorage.token) {
 export default function App() {
   const navigate = useNavigate()
   const [state, dispatch] = useContext(UserContext)
-  
+
   useEffect(() => {
     if (state.isLogin === false) {
       navigate('/')
@@ -24,6 +25,7 @@ export default function App() {
         navigate('/')
       }
     }
+    console.log(state);
   },[state])
 
   const checkUser = async () => {
@@ -51,11 +53,11 @@ export default function App() {
   useEffect(() => {
     checkUser()
   }, [])
+
   return (
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/product/:id' element={<Detail />} />
-      <Route path='/cart' element={<Cart/>} />
     </Routes>
   )
 }
